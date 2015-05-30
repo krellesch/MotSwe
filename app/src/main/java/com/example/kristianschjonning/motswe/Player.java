@@ -43,15 +43,9 @@ public class Player extends GameObject{
 
     public void update()
     {
-        long elapsed = (System.nanoTime() - startTime)/1000000;
-        if(elapsed > 100)
-        {
-            score++;
-            startTime = System.nanoTime();
-        }
         animation.update();
 
-        //her laver vi acceleretionen for når der trykkes op
+        //her laver vi accelerationen for når der trykkes op
         if(up){
             dy -=1;
         }
@@ -63,7 +57,8 @@ public class Player extends GameObject{
         if(dy<-14)dy = -14;
 
         y += dy*2;
-        //dy = 0;
+        //remove this for normal accelleration
+        dy = 0;
     }
 
     public void draw(Canvas canvas)
@@ -75,4 +70,5 @@ public class Player extends GameObject{
     public void setPlaying(boolean b){playing = b;}
     public void resetDYA(){dy = 0;}
     public void resetScore(){score = 0;}
+    public void setScore(int score) {this.score = score;}
 }
