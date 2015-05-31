@@ -1,16 +1,18 @@
 package com.example.kristianschjonning.motswe;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 
 public class Game extends Activity {
-
+MediaPlayer mySound;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +21,16 @@ public class Game extends Activity {
         //set to full screen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(new GamePanel(this));
+        mySound = MediaPlayer.create(this,R.raw.opening);
+        playMusic();
+    }
+
+    public void playMusic()
+    {
+        mySound.setVolume(3,33);
+        mySound.start();
+        mySound.setLooping(true);
+
     }
 
     @Override

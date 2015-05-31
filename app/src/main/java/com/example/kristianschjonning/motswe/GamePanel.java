@@ -6,6 +6,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
+import android.media.audiofx.EnvironmentalReverb;
+import android.media.audiofx.Equalizer;
+import android.media.audiofx.Virtualizer;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.provider.Contacts;
+import android.provider.Settings;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,11 +31,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public static final int MOVESPEED = -5;
     private long smokeStartTime;
     private long missileStartTime;
+    private long beerStartTime;
     private MainThread thread;
     private Background bg;
     private Player player;
+    private Game game;
     private ArrayList<Smokepuff> smoke;
     private ArrayList<Missile> missiles;
+    private ArrayList<Beer> beers;
     private ArrayList<TopBorder> topborder;
     private ArrayList<BotBorder> botborder;
     private Random rand = new Random();
@@ -34,6 +47,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private boolean topDown = true;
     private boolean botDown = true;
     private boolean newGameCreated;
+    private Handler handler = new Handler();
 
     //increase to slow down difficulty progression, decrease to speed up difficulty progression
     private int progressDenom = 20;
@@ -44,6 +58,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private boolean dissapear;
     private boolean started;
     private int best;
+
+    private AsyncTask<Void, Void, Void> taskA;
+    private volatile int i;
 
 
 
@@ -86,13 +103,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceCreated(SurfaceHolder holder){
 
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.grassbg1));
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicopter), 65, 25, 3);
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.svensker), 65, 26, 1);
         smoke = new ArrayList<Smokepuff>();
         missiles = new ArrayList<Missile>();
+        beers = new ArrayList<Beer>();
         topborder = new ArrayList<TopBorder>();
         botborder = new ArrayList<BotBorder>();
         smokeStartTime=  System.nanoTime();
         missileStartTime = System.nanoTime();
+        beerStartTime = System.nanoTime();
 
         thread = new MainThread(getHolder(), this);
         //we can safely start the game loop
@@ -216,6 +235,51 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 }
             }
 
+
+
+            //add missiles on timer
+            long beerElapsed = (System.nanoTime()-beerStartTime)/1000000;
+            if(missileElapsed >(2000 - player.getScore()/4)){
+
+
+                //first missile always goes down the middle
+                if(beers.size()==0)
+                {
+                    beers.add(new Beer(BitmapFactory.decodeResource(getResources(),R.drawable.beer
+                            ),WIDTH + 10, HEIGHT/2, 10, 25, player.getScore(), 1));
+                }
+                else
+                {
+
+                    beers.add(new Beer(BitmapFactory.decodeResource(getResources(),R.drawable.beer),
+                            WIDTH+10, (int)(rand.nextDouble()*(HEIGHT - (maxBorderHeight * 2))+maxBorderHeight),10,25, player.getScore(),1));
+                }
+
+                //reset timer
+                beerStartTime = System.nanoTime();
+            }
+            //loop through every missile and check collision and remove
+            for(int i = 0; i<beers.size();i++)
+            {
+                //update beer
+                beers.get(i).update();
+
+                if(collision(beers.get(i),player))
+                {
+                    beers.remove(i);
+                    long startTime = System.currentTimeMillis(); //fetch starting time
+                    player.setScore(player.getScore()+10);
+                    break;
+                }
+                //remove beer if it is way off the screen
+                if(beers.get(i).getX()<-100)
+                {
+                    beers.remove(i);
+                    break;
+                }
+            }
+
+
             //add smoke puffs on timer
             long elapsed = (System.nanoTime() - smokeStartTime)/1000000;
             if(elapsed > 120){
@@ -231,8 +295,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                     smoke.remove(i);
                 }
             }
-        }
-        else{
+        } else{
             player.resetDYA();
             if(!reset)
             {
@@ -256,9 +319,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
 
     }
+
     public boolean collision(GameObject a, GameObject b) {
         if (Rect.intersects(a.getRectangle(), b.getRectangle()))
         {
+            closeActivity.run();
             return true;
         }
         return false;
@@ -286,8 +351,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             {
                 m.draw(canvas);
             }
-
-
+            //draw missiles
+            for(Beer b: beers)
+            {
+                b.draw(canvas);
+            }
             //draw topborder
             for(TopBorder tb: topborder)
             {
@@ -328,11 +396,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 //remove element of arraylist, replace it by adding a new one
 
                 //calculate topdown which determines the direction the border is moving (up or down)
-                if(topborder.get(topborder.size()-1).getHeight()>=maxBorderHeight)
+                if(topborder.get(topborder.size()- 1).getHeight()>=maxBorderHeight)
                 {
                     topDown = false;
                 }
-                if(topborder.get(topborder.size()-1).getHeight()<=minBorderHeight)
+                if(topborder.get(topborder.size()- 1).getHeight()<=minBorderHeight)
                 {
                     topDown = true;
                 }
@@ -341,20 +409,43 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 {
                     topborder.add(new TopBorder(BitmapFactory.decodeResource(getResources(),
                             R.drawable.brick),topborder.get(topborder.size()-1).getX()+20,
-                            0, topborder.get(topborder.size()-1).getHeight()+1));
+                            0, topborder.get(topborder.size()- 1).getHeight()+1));
                 }
                 //new border added wil have smaller height
                 else
                 {
                     topborder.add(new TopBorder(BitmapFactory.decodeResource(getResources(),
                             R.drawable.brick),topborder.get(topborder.size()-1).getX()+20,
-                            0, topborder.get(topborder.size()-1).getHeight()-1));
+                            0, topborder.get(topborder.size()- 1).getHeight()-1));
                 }
 
             }
         }
 
     }
+
+    public void play()
+    {
+        MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.rage);
+        mp.start();
+    }
+
+    Thread closeActivity = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                play();
+                closeActivity.sleep(3000);
+            } catch (Exception e) {
+                e.getLocalizedMessage();
+            }
+        }
+    });
+
+
+
+
+
     public void updateBottomBorder()
     {
         //every 40 points, insert randomly placed bottom blocks that break pattern
@@ -403,6 +494,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         topborder.clear();
 
         missiles.clear();
+        beers.clear();
         smoke.clear();
 
         minBorderHeight = 5;
@@ -456,6 +548,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 
     }
+
+
     public void drawText(Canvas canvas)
     {
         Paint paint = new Paint();
