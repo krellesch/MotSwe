@@ -225,6 +225,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 {
                     missiles.remove(i);
                     player.setPlaying(false);
+                    //closeActivity.run();
                     break;
                 }
                 //remove missile if it is way off the screen
@@ -279,7 +280,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 }
             }
 
-
             //add smoke puffs on timer
             long elapsed = (System.nanoTime() - smokeStartTime)/1000000;
             if(elapsed > 120){
@@ -303,7 +303,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 startReset = System.nanoTime();
                 reset = true;
                 dissapear = true;
-                explosion = new Explosion(BitmapFactory.decodeResource(getResources(),R.drawable.explosion),player.getX(),
+                explosion = new Explosion(getContext(),BitmapFactory.decodeResource(getResources(),R.drawable.explosion),player.getX(),
                         player.getY()-30, 100, 100, 25);
             }
 
@@ -323,7 +323,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public boolean collision(GameObject a, GameObject b) {
         if (Rect.intersects(a.getRectangle(), b.getRectangle()))
         {
-            closeActivity.run();
             return true;
         }
         return false;
@@ -424,28 +423,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
-    public void play()
-    {
-        MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.rage);
-        mp.start();
-    }
-
-    Thread closeActivity = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            try {
-                play();
-                closeActivity.sleep(3000);
-            } catch (Exception e) {
-                e.getLocalizedMessage();
-            }
-        }
-    });
-
-
-
-
-
     public void updateBottomBorder()
     {
         //every 40 points, insert randomly placed bottom blocks that break pattern
@@ -496,6 +473,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         missiles.clear();
         beers.clear();
         smoke.clear();
+        //explosion.clear();
 
         minBorderHeight = 5;
         maxBorderHeight = 30;
@@ -543,10 +521,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                         i * 20, botborder.get(i - 1).getY() - 1));
             }
         }
-
         newGameCreated = true;
-
-
     }
 
 
@@ -571,6 +546,4 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             canvas.drawText("RELEASE TO GO DOWN", WIDTH/2-50, HEIGHT/2 + 40, paint1);
         }
     }
-
-
 }
