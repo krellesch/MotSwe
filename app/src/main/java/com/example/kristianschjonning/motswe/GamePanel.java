@@ -16,10 +16,22 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.provider.Contacts;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.example.kristianschjonning.motswe.model.DatabaseHelper;
+import com.example.kristianschjonning.motswe.model.Score;
+import com.example.kristianschjonning.motswe.model.State;
+import com.example.kristianschjonning.motswe.model.User;
+import com.example.kristianschjonning.motswe.model.UserScore;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 
@@ -28,6 +40,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 {
     public static final int WIDTH = 856;
     public static final int HEIGHT = 480;
+    public final String LOG_TAG = getClass().getSimpleName();
     public static final int MOVESPEED = -5;
     private long smokeStartTime;
     private long missileStartTime;
@@ -62,6 +75,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private AsyncTask<Void, Void, Void> taskA;
     private volatile int i;
 
+    private DatabaseHelper databaseHelper = null;
+
+
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper =
+                    OpenHelperManager.getHelper(getContext(), DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
 
 
     public GamePanel(Context context)
@@ -85,6 +110,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceDestroyed(SurfaceHolder holder){
         boolean retry = true;
         int counter = 0;
+        //release database.
+         if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
         while(retry && counter<1000)
         {
             counter++;
@@ -488,6 +518,23 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
     public void newGame()
     {
+        try{
+            if(player.getScore() != 0){
+            Score score = new Score(player.getScore());
+            Log.e(LOG_TAG,"score:"+ score);
+            getHelper().getScoreDao().create(score);
+            User user = State.getInstance().getCurrentUser();
+            Log.e(LOG_TAG,"User:"+ user);
+            Log.e(LOG_TAG,"getHelper:"+ getHelper());
+            UserScore userScore = new UserScore(user,score);
+            Log.e(LOG_TAG,"UserScore:"+ userScore);
+            getHelper().getUserScoreDao().create(userScore);
+            }
+        } catch(SQLException e){
+            Log.e(LOG_TAG,"we couldn't update the database with the score.",e );
+        }
+
+
         dissapear = false;
 
         botborder.clear();
@@ -502,11 +549,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         player.resetDYA();
         player.setY(HEIGHT/2);
-
+        try{
+            List<Score> scoreList = getHelper().lookupScoresForUser(State.getInstance().getCurrentUser());
+            Collections.sort(scoreList);
+            best = scoreList.get(0).getScore()*3;
+        } catch(Exception e){
+            best = 0;
+            Log.e(LOG_TAG,"something went wrong when trying to set best, so we just set it to 0");
+        }
         if(player.getScore()>best)
         {
-            best = player.getScore();
-
+            best = player.getScore()*3;
         }
         player.resetScore();
 
@@ -559,6 +612,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         canvas.drawText("DISTANCE: " + (player.getScore()*3), 10, HEIGHT - 10, paint);
         canvas.drawText("BEST: " + best, WIDTH - 215, HEIGHT - 10, paint);
 
+
         if(!player.getPlaying()&&newGameCreated&&reset)
         {
             Paint paint1 = new Paint();
@@ -569,6 +623,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             paint1.setTextSize(20);
             canvas.drawText("PRESS AND HOLD TO GO UP", WIDTH/2-50, HEIGHT/2 + 20, paint1);
             canvas.drawText("RELEASE TO GO DOWN", WIDTH/2-50, HEIGHT/2 + 40, paint1);
+            canvas.drawText("Highscores:", WIDTH/2-50, HEIGHT/2 + 60, paint1);
+            List<Score> highScoreList = null;
+            try{
+                highScoreList=getHelper().lookupScoresForUser(State.getInstance().getCurrentUser());
+            } catch(Exception e){
+                Log.d(LOG_TAG,"Maybe the current user is null",e);
+            }
+            int counter = 1;
+            int height = HEIGHT/2 + 80;
+            Collections.sort(highScoreList);
+            if(highScoreList !=null){
+                for(Score score :highScoreList){
+                    if(counter > 3){
+                        break;
+                    }
+                    canvas.drawText(counter + ": " + score.getScore()*3, WIDTH/2-50, height, paint1);
+                    counter++;
+                    height += 20;
+                }
+            }
         }
     }
 

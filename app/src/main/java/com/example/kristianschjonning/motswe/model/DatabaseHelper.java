@@ -31,9 +31,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     Dao<Score, Integer> scoreDao = null;
     Dao<User,Integer> userDao = null;
     Dao<UserScore, Integer> userScoreDao = null;
-
-
-    private static DatabaseHelper instance = null;
     private Context context;
     private State state = State.getInstance();
     private PreparedQuery<Score> scoresForUserQuery = null;
@@ -72,6 +69,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
                 state.setDatabasePathExist(false);
             }
     }
+
 
 
 
@@ -145,20 +143,20 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
     }
 
     private PreparedQuery<Score> makeScoresForUserQuery() throws SQLException {
-        QueryBuilder<UserScore, Integer> userScoreQb = userScoreDao.queryBuilder();
+        QueryBuilder<UserScore, Integer> userScoreQb = getUserScoreDao().queryBuilder();
         userScoreQb.selectColumns(UserScore.SCORE_ID_FIELD_NAME);
         SelectArg userSelectArg = new SelectArg();
         userScoreQb.where().eq(UserScore.USER_ID_FIELD_NAME, userSelectArg);
-        QueryBuilder<Score, Integer> postQb = scoreDao.queryBuilder();
+        QueryBuilder<Score, Integer> postQb = getScoreDao().queryBuilder();
         postQb.where().in(Score.ID_FIELD_NAME, userScoreQb);
         return postQb.prepare();
     }
 
     public User findUserByUserName(String username) throws SQLException {
-        QueryBuilder<User, Integer> queryBuilder = userDao.queryBuilder();
+        QueryBuilder<User, Integer> queryBuilder = getUserDao().queryBuilder();
         queryBuilder.where().eq(User.USERNAME_FIELD_NAME, username);
         PreparedQuery<User> preparedQuery = queryBuilder.prepare();
-        return userDao.queryForFirst(preparedQuery);
+        return getUserDao().queryForFirst(preparedQuery);
 
     }
 

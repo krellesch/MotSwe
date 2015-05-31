@@ -62,7 +62,8 @@ public class SplashScreen extends OrmLiteBaseActivity<DatabaseHelper> {
         helper = OpenHelperManager.getHelper(this,DatabaseHelper.class);
         db = helper.getWritableDatabase();
         new LoadViewTask().execute();
-        try  {
+        getHelper();
+        /*try  {
             User user = new User("denlillemand");
             Score score1 = new Score(47);
             Score score2 = new Score(57);
@@ -96,7 +97,7 @@ public class SplashScreen extends OrmLiteBaseActivity<DatabaseHelper> {
             }
         } catch(Exception e) {
             Log.e(LOG_TAG," we couldn't initialize the database",e);
-        }
+        }*/
 
     }
 

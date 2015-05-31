@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by herpderp on 30/05/2015.
  */
-public class Score {
+public class Score<T> implements Comparable<Score>{
 
     public final static String ID_FIELD_NAME = "id";
     public final static String SCORE = "Score:";
@@ -45,4 +45,8 @@ public class Score {
         return id;
     }
 
+    @Override
+    public int compareTo(Score another) {
+        return  this.getScore() == another.getScore() ? 0 : (another.getScore() < this.getScore() ? -1 : 1);
+    }
 }

@@ -21,10 +21,12 @@ import com.example.kristianschjonning.motswe.model.DatabaseHelper;
 import com.example.kristianschjonning.motswe.model.Score;
 import com.example.kristianschjonning.motswe.model.State;
 import com.example.kristianschjonning.motswe.model.User;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GameMenu extends OrmLiteBaseActivity<DatabaseHelper> implements View.OnClickListener {
@@ -75,34 +77,43 @@ public class GameMenu extends OrmLiteBaseActivity<DatabaseHelper> implements Vie
         userNameEditText = (EditText) findViewById(R.id.userNameEditText);
     }
 
-    public void setUser(String username){
+    public void setUser(String username) {
         User user = new User(username);
-        try{
+        try {
             getHelper().getUserDao().create(user);
-        } catch(SQLException e){
-            Log.e(LOG_TAG,"we couldnt create the user, hopefully its allready created.",e);
+        } catch (SQLException e) {
+            Log.e(LOG_TAG, "we couldnt create the user, hopefully its allready created.", e);
         }
         try {
             user = getHelper().findUserByUserName(username);
-        } catch(SQLException e){
-            Log.e(LOG_TAG,"okay, so we probably couldnt create the user,and we couldnt retrieve it? whats up?" +e);
+        } catch (SQLException e) {
+            Log.e(LOG_TAG, "okay, so we probably couldnt create the user,and we couldnt retrieve it? whats up?" + e);
         }
 
         State.getInstance().setCurrentUser(user);
 
-            try {
-                 scoreListAdapter = new ScoreListAdapter(getApplicationContext(),getHelper().lookupScoresForUser(user));
-            } catch(SQLException e){
-                 scoreListAdapter = new ScoreListAdapter(getApplicationContext(),new ArrayList<Score>());
-                Log.e(LOG_TAG,"database did exist, and user wasnt null, but it still wasnt possible to retrieve the users scorelist. " +
-                        "we just returned an empty list to the adapter.",e);
-            }
+        try {
+            scoreListAdapter = new ScoreListAdapter(getApplicationContext(), getHelper().lookupScoresForUser(user));
+        } catch (SQLException e) {
+            scoreListAdapter = new ScoreListAdapter(getApplicationContext(), new ArrayList<Score>());
+            Log.e(LOG_TAG, "database did exist, and user wasnt null, but it still wasnt possible to retrieve the users scorelist. " +
+                    "we just returned an empty list to the adapter.", e);
+        }
         scoreView.setAdapter(scoreListAdapter);
+        scoreListAdapter.sort(new Comparator<Score>() {
+            @Override
+            public int compare(Score leftScore, Score rightScore) {
+                return leftScore.getScore() == rightScore.getScore() ? 0 : (rightScore.getScore() < leftScore.getScore() ? -1 : 1);
+            }
+        });
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onBackPressed() {
+        //release database.
+        super.onBackPressed();
+        if (getHelper() != null) {
+            OpenHelperManager.releaseHelper();
+        }
     }
-
 }
