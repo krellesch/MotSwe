@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Score {
 
     public final static String ID_FIELD_NAME = "id";
+    public final static String SCORE = "Score:";
 
     @DatabaseField(generatedId = true, columnName = ID_FIELD_NAME)
     private int id;

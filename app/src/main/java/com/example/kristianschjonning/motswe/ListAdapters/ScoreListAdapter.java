@@ -24,18 +24,12 @@ public class ScoreListAdapter extends ArrayAdapter<Score>{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
         Score score = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.score_item, parent, false);
         }
-        // Lookup view for data population
         TextView tvScore = (TextView) convertView.findViewById(R.id.score_textview);
-
-        // Populate the data into the template view using the data object
-        tvScore.setText(""+score.getScore());
-        // Return the completed view to render on screen
+        tvScore.setText("Score:"+score.getScore());
         return convertView;
     }
 

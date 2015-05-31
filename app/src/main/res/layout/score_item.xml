@@ -6,11 +6,11 @@
                 android:background="@android:color/white">
 
     <TextView
-            android:id="@+id/score_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"/>
-
-
+        android:id="@+id/score_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_alignParentTop="true"
+        />
 </RelativeLayout>
