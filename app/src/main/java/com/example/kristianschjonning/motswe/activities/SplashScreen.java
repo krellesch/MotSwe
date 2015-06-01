@@ -140,13 +140,13 @@ public class SplashScreen extends OrmLiteBaseActivity<DatabaseHelper> {
         }
 
         @Override
-        protected void onPostExecute(Long l) {
-            super.onPostExecute(l);
+         protected void onPostExecute(Long l) {
+        super.onPostExecute(l);
             /*viewSwitcher.addView(ViewSwitcher.inflate(SplashScreen.this, R.layout.activity_game, null));
             viewSwitcher.showNext();*/
-            Intent i = new Intent(getApplicationContext(), GameMenu.class);
-            startActivity(i);
-        }
+        Intent i = new Intent(getApplicationContext(), GameMenu.class);
+        startActivity(i);
+    }
 
         @Override
         protected void onProgressUpdate(Integer... values) {

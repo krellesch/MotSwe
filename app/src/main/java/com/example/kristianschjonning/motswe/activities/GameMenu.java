@@ -49,6 +49,8 @@ public class GameMenu extends OrmLiteBaseActivity<DatabaseHelper> implements Vie
                 startActivity(i);
                 break;
             case R.id.settings:
+                Intent intent = new Intent(getApplicationContext(), ToggleButtonActivity.class);
+                startActivity(intent);
                 break;
             case R.id.about:
                 break;

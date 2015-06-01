@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import sound.Sound;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
@@ -88,7 +89,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
 
 
-
     public GamePanel(Context context)
     {
         super(context);
@@ -132,7 +132,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder holder){
 
-        bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.grassbg1));
+        bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.stars));
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.svensker), 65, 26, 1);
         smoke = new ArrayList<Smokepuff>();
         missiles = new ArrayList<Missile>();
@@ -300,6 +300,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                     beers.remove(i);
                     long startTime = System.currentTimeMillis(); //fetch starting time
                     player.setScore(player.getScore()+10);
+                    Sound.playSound(getContext(),6);
                     break;
                 }
                 //remove beer if it is way off the screen
@@ -413,7 +414,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         if(player.getScore()%50 ==0)
         {
             topborder.add(new TopBorder(BitmapFactory.decodeResource(getResources(),R.drawable.brick
-            ),topborder.get(topborder.size()-1).getX()+20,0,(int)((rand.nextDouble()*(maxBorderHeight
+            ),topborder.get(topborder.size()-1).getX()+20,0,(int)((1*(maxBorderHeight
             ))+1)));
         }
         for(int i = 0; i<topborder.size(); i++)
@@ -592,8 +593,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         {
             Paint paint1 = new Paint();
             paint1.setTextSize(40);
+            paint1.setColor(Color.WHITE);
             paint1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-            canvas.drawText("PRESS TO START", WIDTH/2-50, HEIGHT/2, paint1);
+            canvas.drawText("PRESS TO START", WIDTH / 2 - 50, HEIGHT / 2, paint1);
 
             paint1.setTextSize(20);
             canvas.drawText("PRESS AND HOLD TO GO UP", WIDTH/2-50, HEIGHT/2 + 20, paint1);

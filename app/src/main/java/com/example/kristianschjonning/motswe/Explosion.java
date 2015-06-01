@@ -6,7 +6,11 @@ package com.example.kristianschjonning.motswe;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
+
+import sound.Sound;
 
 public class Explosion {
     private int x;
@@ -17,7 +21,10 @@ public class Explosion {
     private Animation animation = new Animation();
     private Bitmap spritesheet;
     private Context context;
+    private SoundPool soundPool;
 
+
+    // Sekunder 0,12
     public Explosion(Context con,Bitmap res, int x, int y, int w, int h, int numFrames)
     {
         this.x = x;
@@ -37,7 +44,8 @@ public class Explosion {
         }
         animation.setFrames(image);
         animation.setDelay(10);
-        start();
+        Sound.playSound(context);
+        //start();
     }
 
     public void draw(Canvas canvas)
@@ -56,25 +64,4 @@ public class Explosion {
         }
     }
     public int getHeight(){return height;}
-
-    public void play()
-    {
-        MediaPlayer mp = MediaPlayer.create(context, R.raw.rage);
-        mp.start();
-    }
-
-    public void start() {
-        final Thread closeActivity = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    play();
-                    MainThread.sleep(3000);
-                } catch (Exception e) {
-                    e.getLocalizedMessage();
-                }
-            }
-        });
-        closeActivity.start();
-    }
 }

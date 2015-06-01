@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import sound.Sound;
+
 
 public class Game extends Activity {
-MediaPlayer mySound;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,16 +23,7 @@ MediaPlayer mySound;
         //set to full screen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(new GamePanel(this));
-        mySound = MediaPlayer.create(this,R.raw.opening);
-        playMusic();
-    }
-
-    public void playMusic()
-    {
-        mySound.setVolume(0.2f,0.2f);
-        mySound.start();
-        mySound.setLooping(true);
-
+        Sound.playMusic(getApplicationContext());
     }
 
     @Override
@@ -59,6 +52,5 @@ MediaPlayer mySound;
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-        mySound.stop();
     }
 }
