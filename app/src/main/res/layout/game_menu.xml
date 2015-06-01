@@ -34,7 +34,11 @@
     style="@style/MenuFont"
     android:layout_width="145dp"
     android:layout_gravity="right" />
+<<<<<<< HEAD
+    <TextView
+=======
 <TextView
+>>>>>>> 4118d191bdeece684c5317e0f79cb7d185cda503
     android:text="ABOUT"
     android:onClick="onClick"
     android:clickable="true"
@@ -42,7 +46,11 @@
     style="@style/MenuFont"
     android:layout_width="127dp"
     android:layout_gravity="right" />
+<<<<<<< HEAD
+    <TextView
+=======
 <TextView
+>>>>>>> 4118d191bdeece684c5317e0f79cb7d185cda503
     android:text="EXIT"
     android:onClick="onClick"
     android:clickable="true"

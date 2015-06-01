@@ -27,7 +27,7 @@ MediaPlayer mySound;
 
     public void playMusic()
     {
-        mySound.setVolume(3,33);
+        mySound.setVolume(0.2f,0.2f);
         mySound.start();
         mySound.setLooping(true);
 
@@ -53,5 +53,12 @@ MediaPlayer mySound;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+        mySound.stop();
     }
 }
