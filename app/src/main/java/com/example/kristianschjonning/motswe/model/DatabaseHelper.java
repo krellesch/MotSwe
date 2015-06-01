@@ -144,12 +144,19 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
 
     private PreparedQuery<Score> makeScoresForUserQuery() throws SQLException {
         QueryBuilder<UserScore, Integer> userScoreQb = getUserScoreDao().queryBuilder();
+        //selecter ScoreID Column
         userScoreQb.selectColumns(UserScore.SCORE_ID_FIELD_NAME);
+        //laver et nyt SelectAry objekt.
         SelectArg userSelectArg = new SelectArg();
+        //saetter where clausen til at den skal selecte fra user id kolonnen hvor userSelectArg = User_ID_FIELD_NAME kolonnen.
         userScoreQb.where().eq(UserScore.USER_ID_FIELD_NAME, userSelectArg);
-        QueryBuilder<Score, Integer> postQb = getScoreDao().queryBuilder();
-        postQb.where().in(Score.ID_FIELD_NAME, userScoreQb);
-        return postQb.prepare();
+        //henter vores ScoreDao, fordi det jo er det table vi skal selecte fra.
+        QueryBuilder<Score, Integer> scoreQb = getScoreDao().queryBuilder();
+        /* Så her giver vi vores scoreQb den instruktion at den skal hente
+         * alle scores, hvor Score.ID_FIELD_NAME, matcher med det userId som er indikeret i userScoreQB. */
+        scoreQb.where().in(Score.ID_FIELD_NAME, userScoreQb);
+
+        return scoreQb.prepare();
     }
 
     public User findUserByUserName(String username) throws SQLException {
@@ -157,7 +164,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper
         queryBuilder.where().eq(User.USERNAME_FIELD_NAME, username);
         PreparedQuery<User> preparedQuery = queryBuilder.prepare();
         return getUserDao().queryForFirst(preparedQuery);
-
     }
 
 }

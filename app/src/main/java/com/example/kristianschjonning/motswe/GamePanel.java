@@ -81,8 +81,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     private DatabaseHelper getHelper() {
         if (databaseHelper == null) {
-            databaseHelper =
-                    OpenHelperManager.getHelper(getContext(), DatabaseHelper.class);
+            databaseHelper = OpenHelperManager.getHelper(getContext(), DatabaseHelper.class);
         }
         return databaseHelper;
     }
