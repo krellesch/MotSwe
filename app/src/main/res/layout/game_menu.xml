@@ -34,7 +34,7 @@
     style="@style/MenuFont"
     android:layout_width="145dp"
     android:layout_gravity="right" />
-<TextView
+    <TextView
     android:text="ABOUT"
     android:onClick="onClick"
     android:clickable="true"
@@ -42,7 +42,7 @@
     style="@style/MenuFont"
     android:layout_width="127dp"
     android:layout_gravity="right" />
-<TextView
+    <TextView
     android:text="EXIT"
     android:onClick="onClick"
     android:clickable="true"

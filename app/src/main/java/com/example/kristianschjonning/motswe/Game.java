@@ -54,4 +54,11 @@ MediaPlayer mySound;
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+        mySound.stop();
+    }
 }
