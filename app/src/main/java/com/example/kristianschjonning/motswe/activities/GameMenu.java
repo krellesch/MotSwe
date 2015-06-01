@@ -62,6 +62,8 @@ public class GameMenu extends OrmLiteBaseActivity<DatabaseHelper> implements Vie
                 Log.e(LOG_TAG,"something is up:" +userNameEditText.getText() );
                 Log.e(LOG_TAG,"something is up:" +userNameEditText.getText().toString() );
                 setUser(""+userNameEditText.getText());
+                Intent i1 = new Intent(getApplicationContext(), Game.class);
+                startActivity(i1);
                 break;
         }
     }

@@ -34,8 +34,13 @@
     style="@style/MenuFont"
     android:layout_width="145dp"
     android:layout_gravity="right" />
+<<<<<<< HEAD
 
 <TextView
+=======
+<TextView
+
+>>>>>>> bae6518dc7d75eb725989f32ac6296149a0d5686
     android:text="ABOUT"
     android:onClick="onClick"
     android:clickable="true"

@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity
+<<<<<<< HEAD
         android:screenOrientation="landscape"
         android:name=".activities.GameMenu"
         android:label="@string/app_name" >
@@ -28,6 +29,10 @@
         <activity
             android:screenOrientation="landscape"
             android:name=".activities.ToggleButtonActivity"
+=======
+            android:screenOrientation="landscape"
+            android:name=".activities.GameMenu"
+>>>>>>> bae6518dc7d75eb725989f32ac6296149a0d5686
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,6 +40,7 @@
             </intent-filter>
         </activity>
         <activity android:label="@string/app_name"
+            android:screenOrientation="landscape"
             android:name=".activities.SplashScreen"
             android:noHistory="true">
             <intent-filter>
