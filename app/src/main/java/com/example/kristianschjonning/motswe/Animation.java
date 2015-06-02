@@ -3,7 +3,7 @@ package com.example.kristianschjonning.motswe;
 import android.graphics.Bitmap;
 
 /**
- * Created by kristianschjonning on 29/05/15.
+ * Niclas
  */
 public class Animation {
     private Bitmap[] frames;

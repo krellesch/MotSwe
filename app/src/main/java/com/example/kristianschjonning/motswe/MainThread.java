@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 /**
- * Created by kristianschjonning on 29/05/15.
+ * Matti
  */
 public class MainThread extends Thread {
     private int FPS = 30;

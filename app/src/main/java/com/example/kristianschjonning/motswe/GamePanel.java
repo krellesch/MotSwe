@@ -36,7 +36,9 @@ import java.util.Random;
 
 import sound.Sound;
 
-
+/**
+ * Matti, Kristian og Niclas
+ */
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 {
     public static final int WIDTH = 856;

@@ -1,8 +1,6 @@
 package com.example.kristianschjonning.motswe.activities;
 
-/**
- * Created by kristianschjonning on 01/06/15.
- */
+
         import android.app.Activity;
         import android.content.Context;
         import android.media.AudioManager;
@@ -15,7 +13,9 @@ package com.example.kristianschjonning.motswe.activities;
         import com.example.kristianschjonning.motswe.R;
 
         import sound.Sound;
-
+/**
+ * Kristian
+ */
 public class ToggleButtonActivity extends Activity {
     /** Called when the activity is first created. */
 

@@ -29,6 +29,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Matti
+ */
 public class SplashScreen extends OrmLiteBaseActivity<DatabaseHelper> {
     private final String LOG_TAG = getClass().getSimpleName();
     private final int splashScreenLoad = 1000;

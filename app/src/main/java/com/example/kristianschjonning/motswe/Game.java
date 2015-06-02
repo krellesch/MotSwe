@@ -12,7 +12,9 @@ import android.view.WindowManager;
 
 import sound.Sound;
 
-
+/**
+ * Matti
+ */
 public class Game extends Activity {
 
     @Override

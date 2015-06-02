@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Created by herpderp on 30/05/2015.
+ * Matti
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper
 {

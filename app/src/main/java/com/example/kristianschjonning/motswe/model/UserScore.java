@@ -3,7 +3,7 @@ package com.example.kristianschjonning.motswe.model;
 import com.j256.ormlite.field.DatabaseField;
 
 /**
- * Created by herpderp on 30/05/2015.
+ * Matti
  */
 public class UserScore {
     public final static String USER_ID_FIELD_NAME = "user_id";

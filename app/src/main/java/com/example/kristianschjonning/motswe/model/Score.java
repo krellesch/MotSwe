@@ -5,7 +5,7 @@ import com.j256.ormlite.field.DatabaseField;
 import java.util.ArrayList;
 
 /**
- * Created by herpderp on 30/05/2015.
+ * Matti
  */
 public class Score<T> implements Comparable<Score>{
 

@@ -3,7 +3,7 @@ package com.example.kristianschjonning.motswe;
 import android.graphics.Rect;
 
 /**
- * Created by kristianschjonning on 29/05/15.
+ * Niclas
  */
 public abstract class GameObject {
 

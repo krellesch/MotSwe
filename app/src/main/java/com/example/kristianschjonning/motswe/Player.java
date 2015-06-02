@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 /**
- * Created by kristianschjonning on 29/05/15.
+ * Niclas
  */
 public class Player extends GameObject{
     private Bitmap spritesheet;

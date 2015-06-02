@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 /**
- * Created by kristianschjonning on 30/05/15.
+ * Niclas
  */
 public class Smokepuff extends GameObject{
 

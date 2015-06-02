@@ -1,7 +1,7 @@
 package com.example.kristianschjonning.motswe;
 
 /**
- * Created by kristianschjonning on 30/05/15.
+ * Kristian
  */
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -13,8 +13,9 @@ import com.example.kristianschjonning.motswe.model.Score;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * Created by herpderp on 31/05/2015.
+ * Matti
  */
 public class ScoreListAdapter extends ArrayAdapter<Score>{
 

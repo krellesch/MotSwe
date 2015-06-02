@@ -28,7 +28,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
+/**
+ * Matti
+ */
 public class GameMenu extends OrmLiteBaseActivity<DatabaseHelper> implements View.OnClickListener {
     private final String LOG_TAG = getClass().getSimpleName();
     private TextView startView;
